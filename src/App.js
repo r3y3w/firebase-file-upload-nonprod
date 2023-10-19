@@ -1,12 +1,6 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  listAll,
-  list,
-} from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL, listAll, list } from "firebase/storage";
 import { storage } from "./firebase";
 import { v4 } from "uuid";
 
@@ -19,6 +13,7 @@ function App() {
     if (imageUpload == null) return;
     const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
     uploadBytes(imageRef, imageUpload).then((snapshot) => {
+      alert("Image Uploaded");
       getDownloadURL(snapshot.ref).then((url) => {
         setImageUrls((prev) => [...prev, url]);
       });
@@ -37,12 +32,7 @@ function App() {
 
   return (
     <div className="App">
-      <input
-        type="file"
-        onChange={(event) => {
-          setImageUpload(event.target.files[0]);
-        }}
-      />
+      <input type="file" onChange={(event) => { setImageUpload(event.target.files[0])}}/>
       <button onClick={uploadFile}> Upload Image</button>
       {imageUrls.map((url) => {
         return <img src={url} />;
